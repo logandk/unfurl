@@ -31,6 +31,35 @@ void show_help(const string &name)
   show_info("unfurl: usage", s.str());
 }
 
+string sanitize_argument(const string &arg)
+{
+  string s = arg;
+  bool need_quotes = false;
+
+  if (s.find(' ') != string::npos)
+  {
+    need_quotes = true;
+  }
+
+  if (s.find('"') != string::npos)
+  {
+    size_t pos = 0;
+    while((pos = s.find("\"", pos)) != string::npos)
+    {
+       s.replace(pos, 1, "\\\"");
+       pos += 2;
+    }
+    need_quotes = true;
+  }
+
+  if (need_quotes)
+  {
+    s = string("\"") + s + string("\"");
+  }
+
+  return s;
+}
+
 int main(int argc, char *argv[])
 {
   try
@@ -129,7 +158,7 @@ int main(int argc, char *argv[])
     for (int i = 2; i < argc; i++)
     {
       command += " ";
-      command += argv[i];
+      command += sanitize_argument(argv[i]);
     }
 
     return create_process(command);
