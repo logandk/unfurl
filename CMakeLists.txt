@@ -16,10 +16,11 @@ if (CMAKE_COMPILER_IS_GNUCXX )
   set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static -s -mwindows")
 endif()
 
-add_executable(unfurl src/main.cpp
+add_executable(unfurl WIN32 src/main.cpp
+  resources/unfurl.rc
   vendor/zlib/src/zlib/contrib/minizip/unzip.c
   vendor/zlib/src/zlib/contrib/minizip/ioapi.c)
-target_link_libraries(unfurl shlwapi pugixml zlibstatic)
+target_link_libraries(unfurl shlwapi windowscodecs pugixml zlibstatic)
 
 install(TARGETS unfurl DESTINATION bin)
 

@@ -3,9 +3,38 @@
 #include <pugixml.hpp>
 #include "windows_helpers.h"
 #include "zip_helpers.h"
+#include "splash_screen.h"
 
 using namespace std;
 using namespace pugi;
+
+HINSTANCE inst_ = NULL;
+HWND bkg_win_   = NULL;
+HWND txt_win_   = NULL;
+
+void show_splash(const string &app_name)
+{
+  RegisterWindowClass(inst_);
+
+  HBITMAP bkg_img = LoadSplashImage();
+  bkg_win_ = CreateSplashWindow(inst_);
+  SetSplashImage(bkg_win_, bkg_img);
+
+  string splash_text = "Upgrading " + app_name + ", please wait...";
+  HFONT font = CreateFont(16, 0, 0, 0, FW_BOLD, 0, 0, 0, 0, 0, 0, 0, 0, _T("Arial"));
+  HBITMAP txt_img = CreateAlphaTextBitmap(splash_text.c_str(), font, RGB(255, 255, 255));
+  txt_win_ = CreateSplashWindow(inst_);
+  SetSplashImage(txt_win_, txt_img);
+}
+
+void hide_splash()
+{
+  if (bkg_win_ && txt_win_)
+  {
+    DestroyWindow(bkg_win_);
+    DestroyWindow(txt_win_);
+  }
+}
 
 void show_help(const string &name)
 {
@@ -136,6 +165,8 @@ int main(int argc, char *argv[])
     // Unzip package to destination
     if (install_required)
     {
+      show_splash(identifier);
+
       string package_name = identifier + "-" + current_version + ".zip";
       string package_path = join_path(repository, package_name);
 
@@ -161,7 +192,7 @@ int main(int argc, char *argv[])
       command += sanitize_argument(argv[i]);
     }
 
-    return create_process(command);
+    return create_process(command, hide_splash);
   }
   catch (exception &e)
   {
@@ -170,3 +201,16 @@ int main(int argc, char *argv[])
 
   return 1;
 }
+
+int WINAPI WinMain(HINSTANCE inst, HINSTANCE, LPSTR, INT)
+{
+  CoInitialize(NULL);
+
+  inst_ = inst;
+  int r = main(__argc, __argv);
+
+  CoUninitialize();
+
+  return r;
+}
+

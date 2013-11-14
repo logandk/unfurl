@@ -5,6 +5,7 @@
 #include <shlwapi.h>
 #include <shlobj.h>
 #include <stdexcept>
+#include <functional>
 
 bool file_exists(const std::string &path)
 {
@@ -127,7 +128,7 @@ void delete_path(const std::string &path)
   }
 }
 
-unsigned long create_process(const std::string &command)
+unsigned long create_process(const std::string &command, const std::function<void()> callback)
 {
   DWORD exit_code;
   char path[MAX_PATH] = {0};
@@ -165,6 +166,10 @@ unsigned long create_process(const std::string &command)
   {
     throw std::runtime_error("create_process: unable to create process: " + command);
   }
+
+  // When the application is ready, post to the callback
+  WaitForInputIdle(proc_info.hProcess, INFINITE);
+  callback();
 
   // Successfully created the process.  Wait for it to finish.
   WaitForSingleObject(proc_info.hProcess, INFINITE);
