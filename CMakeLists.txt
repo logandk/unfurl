@@ -16,6 +16,10 @@ if (CMAKE_COMPILER_IS_GNUCXX )
   set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static -s -mwindows")
 endif()
 
+if (MSVC)
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+endif()
+
 add_executable(unfurl WIN32 src/main.cpp
   resources/unfurl.rc
   vendor/zlib/src/zlib/contrib/minizip/unzip.c

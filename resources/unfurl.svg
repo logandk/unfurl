@@ -129,6 +129,39 @@
            in="SourceGraphic" />
       </feMerge>
     </filter>
+    <filter
+       id="filter3009"
+       inkscape:label="Drop shadow"
+       width="1.5"
+       height="1.5"
+       x="-.25"
+       y="-.25">
+      <feGaussianBlur
+         id="feGaussianBlur3011"
+         in="SourceAlpha"
+         stdDeviation="5"
+         result="blur" />
+      <feColorMatrix
+         id="feColorMatrix3013"
+         result="bluralpha"
+         type="matrix"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.6 0 " />
+      <feOffset
+         id="feOffset3015"
+         in="bluralpha"
+         dx="0"
+         dy="3"
+         result="offsetBlur" />
+      <feMerge
+         id="feMerge3017">
+        <feMergeNode
+           id="feMergeNode3019"
+           in="offsetBlur" />
+        <feMergeNode
+           id="feMergeNode3021"
+           in="SourceGraphic" />
+      </feMerge>
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -143,8 +176,8 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
-     inkscape:window-width="1680"
-     inkscape:window-height="994"
+     inkscape:window-width="1920"
+     inkscape:window-height="1024"
      inkscape:window-x="-4"
      inkscape:window-y="26"
      inkscape:window-maximized="1" />
@@ -156,7 +189,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -167,7 +200,7 @@
      transform="translate(0,-937.36218)"
      style="display:inline">
     <rect
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3941)"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;filter:url(#filter3009)"
        id="rect2997"
        width="325"
        height="65"
